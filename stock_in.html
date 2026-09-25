@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stock In</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">📦 Inventory Management</div>
+    <div class="admin">👤 Admin</div>
+</header>
+
+<div class="container">
+
+    <aside>
+
+        <h2>MENU</h2>
+
+        <a href="/">📊 Dashboard</a>
+        <a href="/products-page">📦 Products</a>
+        <a href="/categories-page">🏷️ Categories</a>
+        <a href="/suppliers-page">🚚 Suppliers</a>
+        <a href="/customers-page">👥 Customers</a>
+        <a href="/stock-in-page">📥 Stock In</a>
+        <a href="/stock-out-page">📤 Stock Out</a>
+        <a href="/purchases-page">🛒 Purchases</a>
+        <a href="/sales-page">💰 Sales</a>
+        <a href="/transactions-page">📋 Transactions</a>
+
+    </aside>
+
+    <main>
+
+        <h1>Stock In</h1>
+
+        <p class="welcome">
+            Add incoming stock to your inventory
+        </p>
+
+        <div class="product-section">
+
+            <h2>Add Stock</h2>
+
+            <form method="POST" action="/stock-in">
+
+                <label>Product</label>
+
+                <select name="product_id" required>
+
+                    <option value="">-- Select Product --</option>
+
+                    {% for product in products %}
+
+                    <option value="{{ product.product_id }}">
+                        {{ product.product_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label>Quantity</label>
+
+                <input
+                    type="number"
+                    name="quantity"
+                    min="1"
+                    placeholder="Enter quantity"
+                    required
+                >
+
+
+                <button type="submit">
+                    📥 Add Stock
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="product-section">
+
+            <h2>Current Products</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Current Stock</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for product in products %}
+
+                    <tr>
+                        <td>{{ product.product_id }}</td>
+                        <td>{{ product.product_name }}</td>
+                        <td>{{ product.quantity }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
