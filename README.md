@@ -1,2 +1,2 @@
-# Inventory-Management
-A full-stack Inventory Management System featuring user authentication, CRUD operations for products, and low-stock alerts.
+INVENTORY MANAGEMENT SYSTEM 
+http://127.0.0.1:5000
