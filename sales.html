@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sales</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">📦 Inventory Management</div>
+    <div class="admin">👤 Admin</div>
+</header>
+
+<div class="container">
+
+    <aside>
+
+        <h2>MENU</h2>
+
+        <a href="/">📊 Dashboard</a>
+        <a href="/products-page">📦 Products</a>
+        <a href="/categories-page">🏷️ Categories</a>
+        <a href="/suppliers-page">🚚 Suppliers</a>
+        <a href="/customers-page">👥 Customers</a>
+        <a href="/stock-in-page">📥 Stock In</a>
+        <a href="/stock-out-page">📤 Stock Out</a>
+        <a href="/purchases-page">🛒 Purchases</a>
+        <a href="/sales-page">💰 Sales</a>
+        <a href="/transactions-page">📋 Transactions</a>
+
+    </aside>
+
+    <main>
+
+        <h1>Sales</h1>
+
+        <p class="welcome">
+            Record products sold to customers
+        </p>
+
+        <div class="product-section">
+
+            <h2>Add Sale</h2>
+
+            <form method="POST" action="/add-sale">
+
+                <label>Customer</label>
+
+                <select name="customer_id" required>
+
+                    <option value="">-- Select Customer --</option>
+
+                    {% for customer in customers %}
+
+                    <option value="{{ customer.customer_id }}">
+                        {{ customer.customer_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label>Product</label>
+
+                <select name="product_id" required>
+
+                    <option value="">-- Select Product --</option>
+
+                    {% for product in products %}
+
+                    <option value="{{ product.product_id }}">
+                        {{ product.product_name }}
+                        - Stock: {{ product.quantity }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label>Quantity</label>
+
+                <input
+                    type="number"
+                    name="quantity"
+                    min="1"
+                    placeholder="Enter quantity"
+                    required
+                >
+
+
+                <label>Selling Price</label>
+
+                <input
+                    type="number"
+                    name="selling_price"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter selling price"
+                    required
+                >
+
+
+                <button type="submit">
+                    💰 Add Sale
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="product-section">
+
+            <h2>Sales History</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Selling Price</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for sale in sales %}
+
+                    <tr>
+                        <td>{{ sale.sale_id }}</td>
+                        <td>{{ sale.customer_name }}</td>
+                        <td>{{ sale.product_name }}</td>
+                        <td>{{ sale.quantity }}</td>
+                        <td>₹{{ sale.selling_price }}</td>
+                        <td>{{ sale.sale_date }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

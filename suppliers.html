@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Suppliers</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">📦 Inventory Management</div>
+    <div class="admin">👤 Admin</div>
+</header>
+
+<div class="container">
+
+    <aside>
+
+        <h2>MENU</h2>
+
+        <a href="/">📊 Dashboard</a>
+        <a href="/products-page">📦 Products</a>
+        <a href="/categories-page">🏷️ Categories</a>
+        <a href="/suppliers-page" class="active">🚚 Suppliers</a>
+        <a href="/customers-page">👥 Customers</a>
+        <a href="/stock-in-page">📥 Stock In</a>
+        <a href="/stock-out-page">📤 Stock Out</a>
+        <a href="/purchases-page">🛒 Purchases</a>
+        <a href="/sales-page">💰 Sales</a>
+        <a href="/transactions-page">📋 Transactions</a>
+
+    </aside>
+
+    <main>
+
+        <h1>Suppliers</h1>
+
+        <p class="welcome">
+            Manage suppliers
+        </p>
+
+        <div class="product-section">
+
+            <h2>Add Supplier</h2>
+
+            <form method="POST" action="/add-supplier">
+
+                <label>Supplier Name</label>
+
+                <input
+                    type="text"
+                    name="supplier_name"
+                    placeholder="Enter supplier name"
+                    required
+                >
+
+                <label>Phone</label>
+
+                <input
+                    type="text"
+                    name="phone"
+                    placeholder="Enter phone number"
+                >
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter email"
+                >
+
+                <label>Address</label>
+
+                <input
+                    type="text"
+                    name="address"
+                    placeholder="Enter address"
+                >
+
+                <button type="submit">
+                    ➕ Add Supplier
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="product-section">
+
+            <h2>Supplier List</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for supplier in suppliers %}
+
+                    <tr>
+                        <td>{{ supplier.supplier_id }}</td>
+                        <td>{{ supplier.supplier_name }}</td>
+                        <td>{{ supplier.phone }}</td>
+                        <td>{{ supplier.email }}</td>
+                        <td>{{ supplier.address }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

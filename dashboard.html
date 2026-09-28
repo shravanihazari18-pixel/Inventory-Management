@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory Management System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+
+        <div class="logo">
+            📦 Inventory Management
+        </div>
+
+        <div class="admin">
+            👤 Admin
+        </div>
+
+    </header>
+
+
+    <!-- Main Container -->
+    <div class="container">
+
+
+        <!-- Sidebar -->
+        <aside>
+
+            <h2>MENU</h2>
+
+            <a href="/">📊 Dashboard</a>
+
+            <a href="/products-page">📦 Products</a>
+
+            <a href="/categories-page">🏷️ Categories</a>
+
+            <a href="/suppliers-page">🚚 Suppliers</a>
+
+            <a href="/customers-page">👥 Customers</a>
+
+            <a href="/stock-in-page">📥 Stock In</a>
+
+            <a href="/stock-out-page">📤 Stock Out</a>
+
+            <a href="/purchases-page">🛒 Purchases</a>
+
+            <a href="/sales-page">💰 Sales</a>
+
+            <a href="/transactions-page">📋 Transactions</a>
+
+        </aside>
+
+
+        <!-- Dashboard -->
+        <main>
+
+            <h1>Dashboard</h1>
+
+            <p class="welcome">
+                Welcome to the Inventory and Stock Management System
+            </p>
+
+
+            <!-- Dashboard Cards -->
+            <div class="cards">
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        📦
+                    </div>
+
+                    <div>
+                        <h3>Total Products</h3>
+                        <p id="totalProducts">0</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        📊
+                    </div>
+
+                    <div>
+                        <h3>Total Stock</h3>
+                        <p id="totalStock">0</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ⚠️
+                    </div>
+
+                    <div>
+                        <h3>Low Stock</h3>
+                        <p id="lowStock">0</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        💰
+                    </div>
+
+                    <div>
+                        <h3>Inventory Value</h3>
+                        <p id="inventoryValue">₹0</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Products Section -->
+            <div class="product-section">
+
+
+                <div class="section-header">
+
+                    <h2>Products</h2>
+
+                    <input
+                        type="text"
+                        id="searchBox"
+                        placeholder="Search by product name, ID, price or stock..."
+                        onkeyup="searchProducts()"
+                    >
+
+                </div>
+
+
+                <!-- Products Table -->
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Product Name</th>
+
+                                <th>Price</th>
+
+                                <th>Quantity</th>
+
+                                <th>Reorder Level</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="productTable">
+
+                        </tbody>
+
+
+                    </table>
+
+                </div>
+
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+
+        let allProducts = [];
+
+
+        // Load products
+        fetch("/products")
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error("Could not load products");
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                console.log("Products loaded:", data);
+
+                allProducts = data;
+
+                displayProducts(allProducts);
+
+                calculateDashboard(allProducts);
+
+            })
+
+            .catch(error => {
+
+                console.error("Error loading products:", error);
+
+            });
+
+
+        // Display products
+        function displayProducts(products) {
+
+            const table = document.getElementById("productTable");
+
+            table.innerHTML = "";
+
+
+            products.forEach(product => {
+
+
+                let status;
+
+
+                if (
+                    Number(product.quantity) <=
+                    Number(product.reorder_level)
+                ) {
+
+                    status =
+                        '<span class="low">LOW STOCK</span>';
+
+                } else {
+
+                    status =
+                        '<span class="available">AVAILABLE</span>';
+
+                }
+
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>${product.product_id}</td>
+
+                        <td>${product.product_name}</td>
+
+                        <td>₹${product.price}</td>
+
+                        <td>${product.quantity}</td>
+
+                        <td>${product.reorder_level}</td>
+
+                        <td>${status}</td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+        // Calculate dashboard numbers
+        function calculateDashboard(products) {
+
+
+            let totalProducts = products.length;
+
+            let totalStock = 0;
+
+            let lowStock = 0;
+
+            let inventoryValue = 0;
+
+
+            products.forEach(product => {
+
+
+                totalStock +=
+                    Number(product.quantity);
+
+
+                inventoryValue +=
+                    Number(product.price) *
+                    Number(product.quantity);
+
+
+                if (
+                    Number(product.quantity) <=
+                    Number(product.reorder_level)
+                ) {
+
+                    lowStock++;
+
+                }
+
+            });
+
+
+            document.getElementById("totalProducts").textContent =
+                totalProducts;
+
+
+            document.getElementById("totalStock").textContent =
+                totalStock;
+
+
+            document.getElementById("lowStock").textContent =
+                lowStock;
+
+
+            document.getElementById("inventoryValue").textContent =
+                "₹" + inventoryValue.toFixed(2);
+
+        }
+
+
+        // Search products
+        function searchProducts() {
+
+
+            const search = document
+                .getElementById("searchBox")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+            const filteredProducts =
+                allProducts.filter(product => {
+
+
+                    return (
+
+                        String(product.product_id)
+                            .toLowerCase()
+                            .includes(search)
+
+
+                        ||
+
+
+                        String(product.product_name)
+                            .toLowerCase()
+                            .includes(search)
+
+
+                        ||
+
+
+                        String(product.price)
+                            .toLowerCase()
+                            .includes(search)
+
+
+                        ||
+
+
+                        String(product.quantity)
+                            .toLowerCase()
+                            .includes(search)
+
+
+                        ||
+
+
+                        (
+                            Number(product.quantity) <=
+                            Number(product.reorder_level)
+                                ? "low stock"
+                                : "available"
+                        ).includes(search)
+
+                    );
+
+                });
+
+
+            displayProducts(filteredProducts);
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

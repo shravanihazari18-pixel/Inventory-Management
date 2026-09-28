@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Purchases</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">📦 Inventory Management</div>
+    <div class="admin">👤 Admin</div>
+</header>
+
+<div class="container">
+
+    <aside>
+
+        <h2>MENU</h2>
+
+        <a href="/">📊 Dashboard</a>
+        <a href="/products-page">📦 Products</a>
+        <a href="/categories-page">🏷️ Categories</a>
+        <a href="/suppliers-page">🚚 Suppliers</a>
+        <a href="/customers-page">👥 Customers</a>
+        <a href="/stock-in-page">📥 Stock In</a>
+        <a href="/stock-out-page">📤 Stock Out</a>
+        <a href="/purchases-page">🛒 Purchases</a>
+        <a href="/sales-page">💰 Sales</a>
+        <a href="/transactions-page">📋 Transactions</a>
+
+    </aside>
+
+    <main>
+
+        <h1>Purchases</h1>
+
+        <p class="welcome">
+            Record products purchased from suppliers
+        </p>
+
+        <div class="product-section">
+
+            <h2>Add Purchase</h2>
+
+            <form method="POST" action="/add-purchase">
+
+                <label>Supplier</label>
+
+                <select name="supplier_id" required>
+
+                    <option value="">-- Select Supplier --</option>
+
+                    {% for supplier in suppliers %}
+
+                    <option value="{{ supplier.supplier_id }}">
+                        {{ supplier.supplier_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label>Product</label>
+
+                <select name="product_id" required>
+
+                    <option value="">-- Select Product --</option>
+
+                    {% for product in products %}
+
+                    <option value="{{ product.product_id }}">
+                        {{ product.product_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label>Quantity</label>
+
+                <input
+                    type="number"
+                    name="quantity"
+                    min="1"
+                    placeholder="Enter quantity"
+                    required
+                >
+
+
+                <label>Purchase Price</label>
+
+                <input
+                    type="number"
+                    name="purchase_price"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter purchase price"
+                    required
+                >
+
+
+                <button type="submit">
+                    🛒 Add Purchase
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="product-section">
+
+            <h2>Purchase History</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Purchase Price</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for purchase in purchases %}
+
+                    <tr>
+                        <td>{{ purchase.purchase_id }}</td>
+                        <td>{{ purchase.supplier_name }}</td>
+                        <td>{{ purchase.product_name }}</td>
+                        <td>{{ purchase.quantity }}</td>
+                        <td>₹{{ purchase.purchase_price }}</td>
+                        <td>{{ purchase.purchase_date }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
